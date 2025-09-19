@@ -517,13 +517,23 @@ class PocketAgent:
                 self.logger.debug(f"Released run lock for agent {self.name}")
 
 
-    @abstractmethod
-    async def run(self, *args, **kwargs) -> Union[FastMCPToolResult, dict, str]:
+    async def run(self, user_input: str, **kwargs) -> Union[FastMCPToolResult, dict, str]:
         """
         Run the agent.
         Returns the the final result as a FastMCPToolResult, dict, or str.
         """
-        pass
+        # add the user message to the message history
+        await self.add_user_message(user_input)
+
+        # generate llm response and run all tool calls (if any)
+        step_result = await self.step()
+
+        # continue until no more tool calls
+        while step_result.llm_message.tool_calls is not None:
+            step_result = await self.step()
+
+        # return the last llm message without tool calls
+        return step_result.llm_message.content
 
 
     def _create_hook_context(self) -> HookContext:
