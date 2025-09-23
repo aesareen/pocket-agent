@@ -26,9 +26,20 @@
 
 ## Why Pocket Agent?
 
-Most agent frameworks are severely over-bloated. The reason for this is that they are trying to support too many things at once and make every possible agent implementation "simple". This only works until it doesn't and you are stuck having to understand the enormous code base to implement what should be a very simple feature.
+Most agent frameworks are severely over-bloated. The reason for this is that they are trying to support too many things at once and make every possible agent implementation "simple". In the end, you might find yourself using 5-10% of the framework's code for your use case, meaning 90-95% is noise when you encounter a bug. This makes adding features and debugging unnecessarily complex.
 
-Pocket Agent takes the opposite approach by handling only the basic functions of an LLM agent and working with the MCP protocol. That way you don't give up any flexibility when building your agent but a lot of the lower level implementation details are taken care of.
+Pocket Agent takes the opposite approach by implementing the basic functionalities of an Agent as an abstraction one layer above the MCP Client with useful features to provide first-class support for customization. This makes Pocket Agent extremely lightweight. In fact, so lightweight that the **entire core framework and documentation can easily fit into most LLM context windows** (see the built-in utility for this [here](#quick-start-for-llms)). The minimal nature also means that you will use 90-95% of the framework's code for every agent you create.
+
+Despite the minimal code, Pocket Agent is extremely powerful, even out-of-the-box with no custom extensions. By default, Pocket Agent enables users to:
+- Use any remote or local MCP server(s) to integrate any amount of custom tools
+- Run a typical agent loop (generate message, execute tool calls, handle tool results until the LLM does not call any tools)
+- Allow tools to be run in parallel, minimizing execution bottlenecks
+- Build multi-agent systems using built-in features to facilitate interaction
+- View agents' behavior in a minimal built-in CLI frontend
+- Use any local or remote LLM and enforce tpm/rpm limits for parallel LLM generations (Thanks to [LiteLLM](https://docs.litellm.ai/))
+
+
+---
 
 
 ## Design Principles
@@ -36,19 +47,15 @@ Pocket Agent takes the opposite approach by handling only the basic functions of
 ### 🚀 **Lightweight & Simple**
 - Clean abstractions that separate agent logic from MCP client details
 - Core functionality is only 2 files
-
-### 🌐 **Multi-Model Support**
-- Works with any endpoint supported by LiteLLM without requiring code changes
-- Easy model switching and configuration
-- Support for LiteLLM Router to ensure rate limiting for executing agents in parallel
+- Only implements the core, non-case-specific features of an LLM agent
 
 ### 💡 **Extensible**
-- Easily integrate custom frontends using the built-in event system
-- Easily create fully custom agent implementations
+- Easily integrate a custom frontend using the built-in event system
+- Easily implement fully custom agent behaviors
 - Easily develop multi-agent systems
 
-## 🧑‍🍳 [Cookbook](https://github.com/DIR-LAB/pocket-agent/tree/main/cookbook)
-#### Refer to the [Cookbook](https://github.com/DIR-LAB/pocket-agent/tree/main/cookbook) to find example implementations and try out PocketAgent without any implementation overhead
+
+---
 
 
 ## Installation
