@@ -10,19 +10,23 @@ class ConsoleFormatter:
             role = event.data["role"]
             name = event.meta.get("agent_name", None)
             content = event.data.get("content", None)
+            tool_call_id = event.data.get("tool_call_id", None)
             tool_calls = event.data.get("tool_calls", None)
             
             # Create a clean separator and header
             print("\n" + "=" * 60)
-            if name:
-                print(f"🤖 {name} MESSAGE")
+            if role == "tool":
+                print(f"🔧 TOOL RESULT: (ID: {tool_call_id})")
+            elif role == "user":
+                print(f"👤 USER MESSAGE:")
+            elif role == "assistant":
+                print(f"🤖 ASSISTANT {name} MESSAGE:")
             else:
                 print(f"🤖 {role.upper()} MESSAGE")
             print("=" * 60)
             
             # Handle content formatting
             if content:
-                print("📝 Content:")
                 if isinstance(content, str):
                     # Simple string content
                     self._print_formatted_text(content)
@@ -43,8 +47,8 @@ class ConsoleFormatter:
                     function_info = tool_call.get('function', {})
                     function_name = function_info.get('name', 'unknown')
                     function_args = function_info.get('arguments', '{}')
-                    
-                    print(f"   [{i}] {function_name}")
+                    tool_call_id = tool_call.get('id', None)
+                    print(f"   [{i}] {function_name} (ID: {tool_call_id})")
                     try:
                         args_dict = json.loads(function_args) if isinstance(function_args, str) else function_args
                         if args_dict:
@@ -73,7 +77,12 @@ class ConsoleFormatter:
         """Helper method to format text content with proper indentation"""
         if not text:
             return
-        
+        # try to json load the text
+        try:
+            json_text = json.loads(text)
+            text = json.dumps(json_text, indent=2)
+        except (json.JSONDecodeError, TypeError):
+            pass
         # Split into lines and add indentation
         lines = text.strip().split('\n')
         for line in lines:

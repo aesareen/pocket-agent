@@ -3,19 +3,6 @@ import os
 
 from pocket_agent import PocketAgent, AgentConfig
 
-#########################################################
-# Simple Agent (to be used as the main agent)
-#########################################################
-class SimpleAgent(PocketAgent):
-
-    async def run_user_input_loop(self) -> dict:
-        while True:
-            user_input = input("Your input: ")
-            if user_input.lower() == 'quit':
-                break
-            await self.run(user_input)
-        return {"status": "completed"}
-
 
 
 #########################################################
@@ -74,7 +61,7 @@ def create_simple_agent(sub_agents: list[PocketAgent]):
     )
 
     # Create and return the simple agent instance
-    simple_agent = SimpleAgent(
+    simple_agent = PocketAgent(
         agent_config=simple_agent_config,
         mcp_config=simple_agent_mcp_config,
         sub_agents=sub_agents
@@ -89,7 +76,9 @@ async def main():
     simple_agent = create_simple_agent([weather_agent])
 
     # Run the simple agent
-    await simple_agent.run_user_input_loop()
+    await simple_agent.run("Hello! What is the weather in Tokyo?")
+    await simple_agent.run("Get the 3 day forecast for tokyo, sydney and london and make them into a table")
+
 
 if __name__ == "__main__":
     asyncio.run(main())

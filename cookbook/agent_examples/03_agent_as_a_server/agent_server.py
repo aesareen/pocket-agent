@@ -39,4 +39,4 @@ def create_weather_agent():
 if __name__ == "__main__":
     weather_agent = create_weather_agent()
     server = weather_agent.as_mcp_server()
-    server.run()
+    server.run(show_banner=False)
