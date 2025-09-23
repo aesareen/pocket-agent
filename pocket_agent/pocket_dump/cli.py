@@ -166,7 +166,7 @@ def generate_markdown_documentation(source_files: List[Path], doc_files: List[Pa
     
     # Generate documentation section
     if include_docs and doc_files:
-        content += "# 📖 Documentation\n\n"
+        content += "# 📖 Documentation:\n\n"
         
         for file_path in doc_files:
             relative_path = file_path.relative_to(base_path)
@@ -189,7 +189,7 @@ def generate_markdown_documentation(source_files: List[Path], doc_files: List[Pa
     
     # Generate source code section
     if include_source and source_files:
-        content += "# 🔧 Source Code\n\n"
+        content += "# 🔧 Source Code:\n\n"
         
         for file_path in source_files:
             try:
@@ -210,8 +210,7 @@ def generate_markdown_documentation(source_files: List[Path], doc_files: List[Pa
                 "agent.py": "Core PocketAgent class - the heart of the framework with agent lifecycle management",
                 "client.py": "PocketAgentClient for MCP server communication and tool execution",
                 "console_formatter.py": "Console output formatting for agent events and interactions",
-                "logger.py": "Professional logging configuration with file rotation and level management",
-                "cli.py": "Command-line interface for dumping source code and documentation"
+                "logger.py": "Professional logging configuration with file rotation and level management"
             }
             
             file_desc = descriptions.get(file_path.name, "Source code file")

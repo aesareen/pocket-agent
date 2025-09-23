@@ -4,8 +4,7 @@ import json
 import os
 from pathlib import Path
 import litellm
-from agent import SimpleAgent
-from pocket_agent import AgentConfig, AgentEvent, AgentHooks
+from pocket_agent import AgentConfig, AgentEvent, AgentHooks, PocketAgent
 import threading
 import time
 
@@ -114,7 +113,7 @@ def initialize_agent(real_time_placeholder):
         hooks = StreamlitAgentHooks(real_time_placeholder)
         
         # Create agent with the custom hooks
-        agent = SimpleAgent(
+        agent = PocketAgent(
             agent_config=config,
             mcp_config=mcp_config,
             hooks=hooks

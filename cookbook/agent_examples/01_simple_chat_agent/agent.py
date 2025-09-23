@@ -3,24 +3,6 @@ from pocket_agent import PocketAgent, AgentConfig
 from typing import Dict, Any
 
 
-class SimpleAgent(PocketAgent):
-    """Simple agent that only implements the run method"""
-    
-    async def run(self, user_input: str) -> Dict[str, Any]:
-        """
-        Simple conversation loop for interactive chat.
-        This method handles a single user input and generates a response.
-        """
-        await self.add_user_message(user_input)
-        # Generate response and execute tools in a loop
-        step_result = await self.step()
-        while step_result.llm_message.tool_calls is not None:
-            step_result = await self.step()
-        
-        return step_result.llm_message.content
-
-
-
 async def main():
     import os
 
@@ -40,7 +22,7 @@ async def main():
         system_prompt="You are a helpful assistant who answers user questions and uses provided tools when applicable"
     )
     # Create and run agent
-    agent = SimpleAgent(
+    agent = PocketAgent(
         agent_config=config,
         mcp_config=mcp_config
     )

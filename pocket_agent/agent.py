@@ -127,7 +127,7 @@ class PocketAgent:
             self.agent_config.agent_id = str(uuid.uuid4())
 
         if not agent_config.name:
-            self.logger.warning("Agent name is not set, using agent_id as name")
+            self.logger.debug("Agent name is not set, using agent_id as name")
             self.agent_config.name = self.agent_config.agent_id
 
         if router:

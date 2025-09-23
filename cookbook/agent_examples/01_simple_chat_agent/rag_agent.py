@@ -1,20 +1,6 @@
 import asyncio
 from pocket_agent import PocketAgent, AgentConfig
 
-class SimpleAgent(PocketAgent):
-    async def run(self, user_input: str):
-        """Simple conversation loop"""
-
-        # Add user message
-        await self.add_user_message(user_input)
-        
-            # Generates response and executes any tool calls
-        step_result = await self.step()
-        while step_result.llm_message.tool_calls is not None:
-            step_result = await self.step()
-    
-        return step_result.llm_message.content
-
 
 
 async def main():
@@ -41,7 +27,7 @@ async def main():
             The query tool accepts a `query` argument which is the string you want to find semantically similar results for from the Nike 2023 Annual Report."
     )
     # Create and run agent
-    agent = SimpleAgent(
+    agent = PocketAgent(
         agent_config=config,
         mcp_config=mcp_config
     )
