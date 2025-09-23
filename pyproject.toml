@@ -1,6 +1,6 @@
 [project]
 name = "pocket-agent"
-version = "0.2.0"
+version = "0.2.2"
 description = "A lightweight, extensible framework for building LLM agents with Model Context Protocol (MCP) support"
 readme = "README.md"
 license = "MIT"
@@ -47,6 +47,10 @@ source = "vcs"
 # Configure the package structure
 [tool.hatch.build.targets.wheel]
 packages = ["pocket_agent"]
+
+# CLI Scripts
+[project.scripts]
+pocket-dump = "pocket_agent.pocket_dump.cli:main"
 
 # Optional dependency groups for uv
 [dependency-groups]

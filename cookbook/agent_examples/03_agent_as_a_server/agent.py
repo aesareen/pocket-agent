@@ -1,6 +1,6 @@
 import asyncio
 import os
-from pocket_agent import PocketAgent
+from pocket_agent import PocketAgent, AgentConfig
 
 
 #########################################################
@@ -8,23 +8,12 @@ from pocket_agent import PocketAgent
 #########################################################
 class SimpleAgent(PocketAgent):
 
-    # run method of main agents does not need to accept any arguments
-    async def run(self) -> dict:
-
-        # main agent will execute until the user quits
+    async def run_user_input_loop(self) -> dict:
         while True:
             user_input = input("Your input: ")
             if user_input.lower() == 'quit':
                 break
-                
-            # Add user message to the agent
-            await self.add_user_message(user_input)
-            
-            # agent will execute until it does not call any tools anymore
-            step_result = await self.step()
-            while step_result.llm_message.tool_calls is not None:
-                step_result = await self.step()
-    
+            await self.run(user_input)
         return {"status": "completed"}
 
 
@@ -46,7 +35,10 @@ def create_simple_agent():
                 "transport": "stdio",
                 "command": "python",
                 "args": ["agent_server.py"],
-                "cwd": os.path.join(os.path.dirname(os.path.abspath(__file__)))
+                "cwd": os.path.join(os.path.dirname(os.path.abspath(__file__))),
+                "env": {
+                    "OPENAI_API_KEY": os.getenv("OPENAI_API_KEY")
+                }
             }
         }
     }
@@ -67,7 +59,7 @@ def create_simple_agent():
 
 async def main():
     simple_agent = create_simple_agent()
-    await simple_agent.run()
+    await simple_agent.run_user_input_loop()
 
 
 if __name__ == "__main__":

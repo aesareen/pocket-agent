@@ -5,25 +5,6 @@ from pocket_agent import PocketAgent, AgentConfig
 
 
 #########################################################
-# Weather Agent (to be used as a sub-agent)
-#########################################################
-class WeatherAgent(PocketAgent):
-    """Simple agent that only implements the run method"""
-
-    # run method of sub-agents must accept a single string argument
-    async def run(self, user_input: str) -> str:
-        await self.add_user_message(user_input)
-
-        # agent will execute until it does not call any tools anymore
-        step_result = await self.step()
-        while step_result.llm_message.tool_calls is not None:
-            step_result = await self.step()
-        
-        # agent returns the final message content as its result
-        return step_result.llm_message.content
-
-
-#########################################################
 # Initialize the weather agent
 #########################################################
 def create_weather_agent():
@@ -48,7 +29,7 @@ def create_weather_agent():
     }
 
     # Create and return the weather agent instance
-    weather_agent = WeatherAgent(
+    weather_agent = PocketAgent(
         agent_config=weather_agent_config,
         mcp_config=weather_mcp_config
     )
