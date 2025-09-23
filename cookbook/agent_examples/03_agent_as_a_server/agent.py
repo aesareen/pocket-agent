@@ -3,20 +3,6 @@ import os
 from pocket_agent import PocketAgent, AgentConfig
 
 
-#########################################################
-# Simple Agent (to be used as the main agent)
-#########################################################
-class SimpleAgent(PocketAgent):
-
-    async def run_user_input_loop(self) -> dict:
-        while True:
-            user_input = input("Your input: ")
-            if user_input.lower() == 'quit':
-                break
-            await self.run(user_input)
-        return {"status": "completed"}
-
-
 
 #########################################################
 # Initialize the simple agent
@@ -50,7 +36,7 @@ def create_simple_agent():
     )
 
     # Create and return the simple agent instance
-    simple_agent = SimpleAgent(
+    simple_agent = PocketAgent(
         agent_config=simple_agent_config,
         mcp_config=simple_agent_mcp_config
     )
@@ -59,7 +45,10 @@ def create_simple_agent():
 
 async def main():
     simple_agent = create_simple_agent()
-    await simple_agent.run_user_input_loop()
+    # use the weather agent running as a server
+    await simple_agent.run("What's the weather in Tokyo?")
+    # use one of the tools from the utilities server
+    await simple_agent.run("multiply 47 by 33")
 
 
 if __name__ == "__main__":

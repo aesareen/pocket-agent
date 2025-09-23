@@ -98,7 +98,7 @@ def _detect_environment():
     ]
     return any(dev_indicators)
 
-def configure_logger(log_level: str = "INFO", console_level: str = "WARNING"):
+def configure_logger(log_level: str = "INFO", console_level: str = "WARNING", name: str = "pocket_agent"):
     """
     Configure hierarchical logging for PocketAgent framework
     
@@ -121,7 +121,7 @@ def configure_logger(log_level: str = "INFO", console_level: str = "WARNING"):
     )
     
     # Get or create the main logger
-    logger = logging.getLogger("pocket_agent")
+    logger = logging.getLogger(name)
     logger.setLevel(log_level_int)
     
     # Prevent duplicate handlers

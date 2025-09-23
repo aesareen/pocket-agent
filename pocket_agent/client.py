@@ -20,6 +20,8 @@ import asyncio
 import logging
 import copy
 
+from pocket_agent.utils.logger import configure_logger as configure_pocket_agent_logger
+
 
 
 @dataclass
@@ -42,7 +44,7 @@ class PocketAgentClient:
                  ):
 
         # Separate loggers for different purposes
-        self.client_logger = client_logger or logging.getLogger("pocket_agent.client")
+        self.client_logger = client_logger or configure_pocket_agent_logger(name="pocket_agent.client")
         self.mcp_logger = mcp_logger or logging.getLogger("pocket_agent.mcp")
         self.mcp_log_handler = log_handler or self._default_mcp_log_handler
 
@@ -107,11 +109,12 @@ class PocketAgentClient:
 
 
 
-    def _default_mcp_log_handler(self, message: LogMessage):
+    async def _default_mcp_log_handler(self, message: LogMessage):
         """Handle MCP server logs using dedicated MCP logger"""
         LOGGING_LEVEL_MAP = logging.getLevelNamesMapping()
         msg = message.data.get('msg')
-        extra = message.data.get('extra', {})
+        extra = message.data.get('extra')
+        extra = extra or {}
         extra.update({
             'source': 'mcp_server'
         })
