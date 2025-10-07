@@ -311,6 +311,9 @@ class PocketAgent:
         tools = await self.mcp_client.get_tools(format="openai")
         if not tools:
             self.logger.debug("No tools found, LLM response will be generated without tools")
+            # remove tool_choice from kwargs if it exists
+            if "tool_choice" in kwargs:
+                del kwargs["tool_choice"]
         else:
             kwargs.update({
                 "tools": tools,
