@@ -14,7 +14,7 @@ class MyAgent(PocketAgent):
 ```python
 agent = PocketAgent(
     agent_config,   # Required: (AgentConfig) Instance of the AgentConfig class
-    mcp_config,     # Optional (if sub_agents provided; Required otherwise): (dict or FastMCP) MCP Server or JSON MCP server configuration to pass tools to the agent
+    mcp_config,     # Optional: (dict or FastMCP) MCP Server or JSON MCP server configuration to pass tools to the agent
     router,         # Optional: A LiteLLM router instance to manage llm rate limits
     logger,         # Optional: A logger instance to capture logs
     hooks,          # Optional: (AgentHooks) optionally define custom behavior at common junction points
