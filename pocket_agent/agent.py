@@ -140,9 +140,9 @@ class PocketAgent:
         self._run_lock = asyncio.Lock()
 
         if not mcp_config and not sub_agents:
-            error_message = "MCP config is empty and no sub agents are provided. At least one of the two must be provided."
-            self.logger.error(error_message)
-            raise ValueError(error_message)
+            self.logger.debug("MCP config is empty and no sub agents are provided. \
+                The agent will be initialized with no tools.")
+            mcp_config = FastMCP()
         
         self.mcp_config = mcp_config
         self.sub_agents = sub_agents
@@ -284,8 +284,6 @@ class PocketAgent:
 
 
                         
-
-
     def create_wrapper_with_context(self, func: Callable) -> Callable:
         async def wrapper(*args, **kwargs):
             hook_context = self._create_hook_context()
@@ -311,9 +309,15 @@ class PocketAgent:
         kwargs.update(override_completion_kwargs)
         messages = self._format_messages()
         tools = await self.mcp_client.get_tools(format="openai")
-        kwargs.update({
-            "tools": tools,
-        })
+        if not tools:
+            self.logger.debug("No tools found, LLM response will be generated without tools")
+            # remove tool_choice from kwargs if it exists
+            if "tool_choice" in kwargs:
+                del kwargs["tool_choice"]
+        else:
+            kwargs.update({
+                "tools": tools,
+            })
         try:
             self.logger.debug(f"Requesting LLM response with kwargs={kwargs}")
             response = await self.llm_completion_handler.acompletion(

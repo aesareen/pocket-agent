@@ -8,6 +8,7 @@ from pocket_agent.agent import (
 from litellm.types.utils import ModelResponse, Message, Choices, Usage
 import os
 import asyncio
+from fastmcp import FastMCP
 
 
 class SimpleTestAgent(PocketAgent):
@@ -417,17 +418,17 @@ class TestPocketAgentMultiAgent:
         assert agent.mcp_client is not None
         assert agent.sub_agents[0].is_sub_agent is True
 
-    def test_agent_fails_when_neither_config_provided(self, simple_config):
+    def test_agent_works_when_neither_config_provided(self, simple_config):
         """Test that agent fails when neither mcp_config nor sub_agents are provided"""
-        with pytest.raises(ValueError) as exc_info:
-            SimpleTestAgent(
+        agent = SimpleTestAgent(
                 agent_config=simple_config,
                 mcp_config=None,
                 sub_agents=None
             )
         
-        assert "MCP config is empty and no sub agents are provided" in str(exc_info.value)
-        assert "At least one of the two must be provided" in str(exc_info.value)
+        assert agent.mcp_client is not None
+        assert type(agent.mcp_config) is FastMCP
+        assert agent.sub_agents is None
 
     def test_agent_works_with_both_mcp_config_and_sub_agents(self, simple_config, sub_agent_config, simple_mcp_config):
         """Test that agent works when both mcp_config and sub_agents are provided"""
