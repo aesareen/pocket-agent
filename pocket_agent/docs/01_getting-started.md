@@ -58,6 +58,6 @@ class SimpleAgent(PocketAgent):
 
 This agent can be initialized in the following way (using the AgentConfig and MCP config from above):
 ```python
-    agent = PocketAgent(agent_config=config, mcp_config=servers)
+    agent = SimpleAgent(agent_config=config, mcp_config=servers)
     await agent.execute_user_input_loop()
 ```
