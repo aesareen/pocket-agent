@@ -131,7 +131,7 @@ You can use PocketAgent out of the box in 3 steps:
 
     agent = PocketAgent(agent_config=config, mcp_config=servers)
 
-    agent_final_answer = await agent.run("What's the weather fo London?")
+    agent_final_answer = await agent.run("What's the weather in London?")
     ```
 
 In the above example, the `run` method will add the input as a user message, and then run in a loop generating new messages and running any tools called by the configured LLM until the configured LLM generates a response which does not have any tool calls. All of the messages to and from the agent are neatly formatted in the console by default.
