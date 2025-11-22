@@ -598,7 +598,7 @@ class TestAgentIntegration:
 
         assert mock_router.acompletion.call_count == 3
 
-        parsed = MultiplicationResponseSchema.model_validate_json(result.choices[0].message.content)
+        parsed = MultiplicationResponseSchema.model_validate_json(result)
         assert parsed.a == 2
         assert parsed.b == 3
         assert parsed.result == 6

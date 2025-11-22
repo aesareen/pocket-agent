@@ -550,10 +550,10 @@ class PocketAgent:
                     await self.add_user_message(
                         "Please return your last result with the JSON Schema format specified."
                     )
-                    structured_response_result = await self._get_llm_response(
+                    step_result = await self.step(
                         **response_format_dict
                     )
-                    return structured_response_result
+                    return step_result.llm_message.content
                 else:
                     self.logger.warning(
                         "JSON Schema is not supported for model "
